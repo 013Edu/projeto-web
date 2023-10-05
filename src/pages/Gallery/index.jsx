@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const images = [
     '/1.jpg',
@@ -8,6 +9,7 @@ const images = [
 ];
 
 const Gallery = () => {
+    const navigate = useNavigate();
     const [likedImages, setLikedImages] = useState(new Array(images.length).fill(false));
 
     const toggleLike = (index) => {
@@ -15,6 +17,20 @@ const Gallery = () => {
         updatedLikedImages[index] = !updatedLikedImages[index];
         setLikedImages(updatedLikedImages);
     };
+
+    const redirectToSelectedImages = () => {
+        navigate('/selected-images');
+    };
+
+    // Filtra as imagens selecionadas com base no estado likedImages
+    const selectedImages = images.filter((_, index) => likedImages[index]);
+
+    const handleNavigate = () => {
+        const selectedImages = images.filter((_, index) => likedImages[index]);
+        console.log('selectedImages:', selectedImages); // Adicione esta linha
+        navigate('/section-images', { state: selectedImages });
+    };
+
 
     return (
         <>
@@ -39,7 +55,12 @@ const Gallery = () => {
                         </div>
                     ))}
                 </div>
-
+                <button
+                    onClick={() => handleNavigate()}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mx-auto block"
+                >
+                    Ver Seleção
+                </button>
             </div>
         </>
     );
